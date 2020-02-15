@@ -33,7 +33,7 @@ public class Conectar {
             
             
         }catch(Exception ex){
-            JOptionPane.showMessageDialog(null, "Por favor revise su conexion a internet\n"+ex);
+            JOptionPane.showMessageDialog(null, "Por favor revise su conexion a internet\n\n"+ex);
             ex.printStackTrace();
         }
         return conect;
