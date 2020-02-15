@@ -34,7 +34,7 @@ public class Conectar {
             
         }catch(Exception ex){
             JOptionPane.showMessageDialog(null, "Por favor revise su conexion a internet\n\n"+ex);
-            ex.printStackTrace();
+            ex.printStackTrace();//ESTE MENSAJE NO SE MUESTRA EN EL FROM
         }
         return conect;
     }
