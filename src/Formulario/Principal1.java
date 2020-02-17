@@ -115,7 +115,7 @@ public class Principal1 extends javax.swing.JFrame {
             Statement st = cn.createStatement();
             ResultSet rs= st.executeQuery(cons);
             
-            while(rs.next()){
+            while(rs.next()){//FGHJKLGHJK
                 registros[0]=rs.getString(1);
                 registros[1]=rs.getString(2);
                 registros[2]=rs.getString(3);
