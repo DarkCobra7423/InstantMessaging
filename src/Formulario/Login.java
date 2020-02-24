@@ -91,7 +91,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_Btn_CerrarActionPerformed
 
     private void btn_IniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_IniciarSesionActionPerformed
-        Principal1 print = new Principal1();
+        Principal print = new Principal();
         print.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btn_IniciarSesionActionPerformed
