@@ -24,11 +24,11 @@ public class Conectar {
             String bd="instantmessaging";
             String usu="carlosdaniel1234";
             String pass="QWERTY12345c";
-                                            //  jdbc:mysql://85.10.205.173/instantmessaging:3306
-            //Class.forName("com.mysql.jdbc.Driver");//                jdbc:mysql://https://www.db4free.net/phpMyAdmin/instantmessaging:3306
-            //conect = DriverManager.getConnection(url, usu, pass);
+            //  jdbc:mysql://85.10.205.173/instantmessaging:3306
+            
             Class.forName("com.mysql.jdbc.Driver");
-            conect = DriverManager.getConnection("jdbc:mysql://" + url + "/" + bd, usu, pass);
+            conect = DriverManager.getConnection("jdbc:mysql://" + "localhost" + "/" + bd, "root", "");
+            //conect = DriverManager.getConnection("jdbc:mysql://" + url + "/" + bd, usu, pass);
             System.out.println("Connection established!");
             
             
@@ -38,5 +38,15 @@ public class Conectar {
         }
         return conect;
     }
+    
+    public void CerrarConexion() {
+	  	try {
+		   conect.close();
+                   System.out.println("Servicios de la base de datos desconectados");
+		}catch (Exception ex) {
+			//throw new ConnectionException("Ha ocurrido un error al intentar cerrar la conexion con Oracle. Error:" + sqle.getMessage());                                   
+                        System.out.println("Error al desconectar la base de datos "+ex);
+		}
+	}
     
 }
