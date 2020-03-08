@@ -50,7 +50,7 @@ public class Consola extends javax.swing.JFrame {
         }else if(Comando.equals("net user 18300104")||Comando.equals("NET USER 18300104")||Comando.equals("Net user 18300104")){
             jtaConsola.append("CobraCorporation/_> "+"Please Enter Your Password...."+"\n");
             estado=1;
-        }else if((estado==1) && Comando.equals("net pass 18300104")){
+        }else if((estado==1) && Comando.equals("net pass 18300104")||Comando.equals("NET PASS 18300104")||Comando.equals("Net pass 18300104")){
             jtaConsola.append("CobraCorporation_> "+"Welcome Mr Dark Cobra....."+"\n\n");
             jtaConsola.append("CobraCorporation/_> "+"Start System? Yes/No"+"\n");
             estado=2;
