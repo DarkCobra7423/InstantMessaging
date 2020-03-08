@@ -6,6 +6,9 @@
 package Formulario;
 
 import java.awt.Color;
+import static java.lang.Thread.sleep;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,8 +33,41 @@ public class Consola extends javax.swing.JFrame {
         Welcome Miss. Solitario
         Welcome MR. Aguilar
         */
-        jtaConsola.setText("        Welcome MR. Dark Cobra\n"+"        Welcome Miss. DH Sawyers\n"+"        Welcome Miss. Solitario\n"+"        Welcome MR. Aguilar\n\n_>");
+        //jtaConsola.setText("");
+        jtaConsola.setText("        Welcome MR. Dark Cobra\n"+"        Welcome Miss. DH Sawyers\n"+"        Welcome Miss. Solitario\n"+"        Welcome MR. Aguilar\n\nroot_>\n");
         
+    }
+    public int estado=0;
+    void Ejecutar(){
+        
+        String Comando=txtComando.getText();
+        jtaConsola.append("CobraCorporation/_> "+Comando+"\n");
+        
+        if(Comando.equals("exit")||Comando.equals("Exit")||Comando.equals("EXIT")){
+            this.dispose();
+        }else if(Comando.equals("clear")||Comando.equals("Clear")||Comando.equals("CLEAR")){
+            CargarDatos();
+        }else if(Comando.equals("net user 18300104")||Comando.equals("NET USER 18300104")||Comando.equals("Net user 18300104")){
+            jtaConsola.append("CobraCorporation/_> "+"Please Enter Your Password...."+"\n");
+            estado=1;
+        }else if((estado==1) && Comando.equals("net pass 18300104")){
+            jtaConsola.append("CobraCorporation_> "+"Welcome Mr Dark Cobra....."+"\n\n");
+            jtaConsola.append("CobraCorporation/_> "+"Start System? Yes/No"+"\n");
+            estado=2;
+        }else if((estado==2) && (Comando.equals("yes"))||(Comando.equals("Yes"))||(Comando.equals("YES"))){
+            jtaConsola.append("\nCobraCorporation/_> "+"Starting System\n" + "Wait a Moment...."+"\n");
+                
+            Principal1 pc=new Principal1();
+                pc.setVisible(true);
+                pc.pack();
+           
+        }else if((estado==2) && (Comando.equals("no"))||(Comando.equals("No"))||Comando.equals("NO")){
+            CargarDatos();
+        }else{
+            jtaConsola.append("CobraCorporation/_> "+"The Command Does Not Exist Or Check The Syntax."+"\n");
+        }
+        
+        txtComando.setText("");
     }
 
     /**
@@ -48,6 +84,7 @@ public class Consola extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtaConsola = new javax.swing.JTextArea();
+        txtComando = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consola");
@@ -77,6 +114,7 @@ public class Consola extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
 
+        jtaConsola.setEditable(false);
         jtaConsola.setBackground(new java.awt.Color(0, 0, 0));
         jtaConsola.setColumns(20);
         jtaConsola.setFont(new java.awt.Font("Consolas", 1, 12)); // NOI18N
@@ -84,19 +122,31 @@ public class Consola extends javax.swing.JFrame {
         jtaConsola.setRows(5);
         jScrollPane1.setViewportView(jtaConsola);
 
+        txtComando.setBackground(new java.awt.Color(0, 0, 0));
+        txtComando.setFont(new java.awt.Font("Consolas", 1, 14)); // NOI18N
+        txtComando.setForeground(new java.awt.Color(0, 204, 0));
+        txtComando.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtComandoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtComando)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtComando, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -107,7 +157,7 @@ public class Consola extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -116,12 +166,19 @@ public class Consola extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtComandoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtComandoActionPerformed
+    
+            // TODO add your handling code here:
+            Ejecutar();
+        
+    }//GEN-LAST:event_txtComandoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -164,5 +221,6 @@ public class Consola extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jtaConsola;
+    private javax.swing.JTextField txtComando;
     // End of variables declaration//GEN-END:variables
 }
