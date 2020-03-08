@@ -24,6 +24,7 @@ public class Consola extends javax.swing.JFrame {
         this.getContentPane().setBackground(Color.BLACK);//Cambia el color del frame(fondo negro)
         jtaConsola.setLineWrap(true);//PARA HACER SALTOS DE LINEA AUTOMATICOS E IMPEDIR EL SCROOLL SE AGRANDE
         CargarDatos();
+        this.setLocationRelativeTo(null);
     }
     
     void CargarDatos(){
@@ -48,14 +49,14 @@ public class Consola extends javax.swing.JFrame {
         }else if(Comando.equals("clear")||Comando.equals("Clear")||Comando.equals("CLEAR")){
             CargarDatos();
         }else if(Comando.equals("net user 18300104")||Comando.equals("NET USER 18300104")||Comando.equals("Net user 18300104")){
-            jtaConsola.append("CobraCorporation/_> "+"Please Enter Your Password...."+"\n");
+            jtaConsola.append("CobraCorporation/Dark_> "+"Please Enter Your Password...."+"\n");
             estado=1;
         }else if((estado==1) && Comando.equals("net pass 18300104")||Comando.equals("NET PASS 18300104")||Comando.equals("Net pass 18300104")){
-            jtaConsola.append("CobraCorporation_> "+"Welcome Mr Dark Cobra....."+"\n\n");
-            jtaConsola.append("CobraCorporation/_> "+"Start System? Yes/No"+"\n");
+            jtaConsola.append("CobraCorporation/Dark_> "+"Welcome Mr Dark Cobra....."+"\n\n");
+            jtaConsola.append("CobraCorporation/Dark_> "+"Start System? Yes/No"+"\n");
             estado=2;
         }else if((estado==2) && (Comando.equals("yes"))||(Comando.equals("Yes"))||(Comando.equals("YES"))){
-            jtaConsola.append("\nCobraCorporation/_> "+"Starting System\n" + "Wait a Moment...."+"\n");
+            jtaConsola.append("\nCobraCorporation/Dark_> "+"Starting System\n" + "Wait a Moment...."+"\n");
                 
             Principal1 pc=new Principal1();
                 pc.setVisible(true);
