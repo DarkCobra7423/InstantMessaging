@@ -5,6 +5,12 @@
  */
 package Formulario;
 
+import Conectar.Conectar;
+import com.sun.glass.events.KeyEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 /**
  *
  * @author Jessi
@@ -16,15 +22,47 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        btnConsola.setMnemonic(KeyEvent.VK_X);
         this.setLocationRelativeTo(null);
+    }
+    
+    void ValidarUsuario(){
+        int resultado=0;
+        String usuario=txtUsuario.getText();
+        String pass=String.valueOf(txtPass.getPassword());
+        
+        String credencial="SELECT * FROM Usuario WHERE usuario='"+usuario+"' AND contrasena= '"+pass+"'";
+        
+        
+        try{
+           
+            Statement st = cn.createStatement();
+            ResultSet rs=st.executeQuery(credencial);
+            
+            if(rs.next()){
+                resultado=1;
+                if(resultado==1){
+                    Principal1 pc=new Principal1();
+                    pc.setVisible(true);
+                    pc.pack();
+                    this.dispose();
+                }
+            }else{
+                jlError.setText("Usuario O Contraseña Incorrectos");
+            }
+            
+        }catch(Exception ex){
+            System.out.println("Error Clase Login Metodo ValidarCredencial \n"+ex);
+        }
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jTextField1 = new javax.swing.JTextField();
+        txtPass = new javax.swing.JPasswordField();
+        jlError = new javax.swing.JLabel();
+        txtUsuario = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         btn_IniciarSesion = new javax.swing.JButton();
@@ -32,12 +70,22 @@ public class Login extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         Btn_Cerrar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btnConsola = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 230, 190, -1));
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 190, -1));
+
+        txtPass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPassActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 230, 190, -1));
+
+        jlError.setForeground(new java.awt.Color(204, 204, 204));
+        getContentPane().add(jlError, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, 190, 20));
+        getContentPane().add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 190, -1));
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("USUARIO");
@@ -82,6 +130,14 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 410));
 
+        btnConsola.setText("Consola");
+        btnConsola.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsolaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnConsola, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 10, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -102,6 +158,18 @@ public class Login extends javax.swing.JFrame {
                reg.setVisible(true);
                this.setVisible(false);
     }//GEN-LAST:event_Btn_RegistrarseActionPerformed
+
+    private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed
+        // TODO add your handling code here:
+        ValidarUsuario();
+    }//GEN-LAST:event_txtPassActionPerformed
+
+    private void btnConsolaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsolaActionPerformed
+        // TODO add your handling code here:
+        Consola cs=new Consola();
+        cs.setVisible(true);
+        cs.pack();
+    }//GEN-LAST:event_btnConsolaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -144,12 +212,16 @@ public class Login extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Btn_Cerrar;
     private javax.swing.JButton Btn_Registrarse;
+    private javax.swing.JButton btnConsola;
     private javax.swing.JButton btn_IniciarSesion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel jlError;
+    private javax.swing.JPasswordField txtPass;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
+    Conectar cc = new Conectar();
+    Connection cn=cc.conexion();
 }
