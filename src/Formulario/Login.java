@@ -23,6 +23,7 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         btnConsola.setMnemonic(KeyEvent.VK_X);
+        btnTamy.setMnemonic(KeyEvent.VK_T);
         this.setLocationRelativeTo(null);
     }
     
@@ -71,6 +72,7 @@ public class Login extends javax.swing.JFrame {
         Btn_Cerrar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnConsola = new javax.swing.JButton();
+        btnTamy = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -138,6 +140,14 @@ public class Login extends javax.swing.JFrame {
         });
         getContentPane().add(btnConsola, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 10, -1, -1));
 
+        btnTamy.setText("TAMY");
+        btnTamy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTamyActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnTamy, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 80, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -170,6 +180,13 @@ public class Login extends javax.swing.JFrame {
         cs.setVisible(true);
         cs.pack();
     }//GEN-LAST:event_btnConsolaActionPerformed
+
+    private void btnTamyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTamyActionPerformed
+        // TODO add your handling code here:
+        TAMY tm=new TAMY();
+        tm.setVisible(true);;
+        tm.pack();
+    }//GEN-LAST:event_btnTamyActionPerformed
 
     /**
      * @param args the command line arguments
@@ -213,6 +230,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JButton Btn_Cerrar;
     private javax.swing.JButton Btn_Registrarse;
     private javax.swing.JButton btnConsola;
+    private javax.swing.JButton btnTamy;
     private javax.swing.JButton btn_IniciarSesion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
