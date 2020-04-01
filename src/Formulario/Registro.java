@@ -4,6 +4,15 @@
  * and open the template in the editor.
  */
 package Formulario;
+        
+
+import Conectar.Conectar;
+import static Formulario.TAMY.fecha;
+import java.awt.Color;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -15,9 +24,50 @@ public class Registro extends javax.swing.JFrame {
      * Creates new form Registro1
      */
     public Registro() {
-        initComponents();
-    }
+         initComponents();
+        this.getContentPane().setBackground(Color.BLACK);
+        this.setLocationRelativeTo(null);
+      
+        
+        ///////////////////
+        Reloj rj=new Reloj(jlHora);
+        rj.start();
+        
+        jlFecha.setText(fecha());
 
+    } // omito el constructor
+   
+       
+    void AgregarDatos(){ // este metodo se utiliza para agregar un nuevo usuario
+         
+        String pass = String.valueOf(jpPass.getPassword()); //que fue?hay una maña mas facil coppiaiars e ly c odpiegargo de la base de datos por eso lo hago ahi porwue asi no hay muchos errores solo pon los 8 signos
+        String id = "0";
+// String hora_fecha = String.valueOf(jlhora_fecha.getToolTipText());// este no va porque se obtiene de un label asi que seria mas o menos asi hora_fecha=jlhora.getText()+" "jlfecha.getText();
+       String hora_fecha= jlFecha.getText()+ " " + jlHora.getText();
+               // que estoy haciendo mal? jlHora es el label donde tienes contenida la hora y me parece que es escrito mal creo qu3 es asi como lo acabo de escribir estas?....  si solo que estoy viendo que está escrito mal ok 
+               //
+       String agregarSQL="INSERT INTO Usuario (`idUsuario`, `nombres`, `apellido_materno`, `apellido_paterno`, `correo`, `usuario`, `contrasena`, `hora_fecha`)VALUES(?,?,?,?,?,?,?,?)";
+       
+         try{
+           PreparedStatement pst  = cn.prepareStatement(agregarSQL);
+           pst.setString(1, id);
+           pst.setString(2, txt_nombres.getText());
+           pst.setString(3, txt_apellido_mat.getText());
+           pst.setString(4,txt_apellido_pat.getText());
+           pst.setString(5,txt_correo.getText());
+           pst.setString(6,txt_usuario.getText());
+           pst.setString(7, pass); 
+           pst.setString(8, hora_fecha);
+           
+           
+           pst.executeUpdate();
+           
+           JOptionPane.showMessageDialog(null, "La cuenta se registró correctamente");
+         }catch(Exception e){
+           JOptionPane.showMessageDialog(null, "Error al guardar los datos\n"+e);
+        }
+         
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,25 +79,28 @@ public class Registro extends javax.swing.JFrame {
 
         btn_Cancelar_Registro = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btn_guardarDatos = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        txt_nombres = new javax.swing.JTextField();
+        txt_apellido_mat = new javax.swing.JTextField();
+        txt_apellido_pat = new javax.swing.JTextField();
+        txt_correo = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jTextField7 = new javax.swing.JTextField();
+        btn_cancelar = new javax.swing.JButton();
+        txt_id = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
+        txt_usuario = new javax.swing.JTextField();
         Btn_Cerrar = new javax.swing.JButton();
+        jpPass = new javax.swing.JPasswordField();
+        jlFecha = new javax.swing.JLabel();
+        jlHora = new javax.swing.JLabel();
         jb_fondo = new javax.swing.JLabel();
+        jlhora_fecha = new javax.swing.JLabel();
 
         btn_Cancelar_Registro.setText("Cancelar Registro");
 
@@ -58,8 +111,13 @@ public class Registro extends javax.swing.JFrame {
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setText("Guardar Datos");
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 380, 150, 30));
+        btn_guardarDatos.setText("Guardar Datos");
+        btn_guardarDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_guardarDatosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_guardarDatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 370, 150, 30));
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -77,10 +135,10 @@ public class Registro extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("correo");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 50, -1));
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, 150, -1));
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 150, -1));
-        getContentPane().add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 150, -1));
-        getContentPane().add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 150, -1));
+        getContentPane().add(txt_nombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, 190, -1));
+        getContentPane().add(txt_apellido_mat, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 190, -1));
+        getContentPane().add(txt_apellido_pat, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 190, -1));
+        getContentPane().add(txt_correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 190, -1));
 
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("IdUsuario");
@@ -94,14 +152,18 @@ public class Registro extends javax.swing.JFrame {
         jLabel10.setText("contraseña:");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
 
-        jButton2.setText("Cancelar");
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 380, 150, 30));
-        getContentPane().add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, 150, -1));
+        btn_cancelar.setText("Cancelar");
+        btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cancelarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 370, 150, 30));
+        getContentPane().add(txt_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, 190, -1));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/loginAzul.png"))); // NOI18N
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 120, -1, -1));
-        getContentPane().add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 270, 150, -1));
-        getContentPane().add(jTextField9, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 310, 150, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 70, -1, -1));
+        getContentPane().add(txt_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 270, 230, -1));
 
         Btn_Cerrar.setBackground(new java.awt.Color(0, 0, 0));
         Btn_Cerrar.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
@@ -112,12 +174,23 @@ public class Registro extends javax.swing.JFrame {
                 Btn_CerrarActionPerformed(evt);
             }
         });
-        getContentPane().add(Btn_Cerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 0, -1, 30));
+        getContentPane().add(Btn_Cerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 0, -1, 30));
+        getContentPane().add(jpPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 300, 230, -1));
+
+        jlFecha.setForeground(new java.awt.Color(0, 204, 0));
+        jlFecha.setText("DD/MM/AAAA");
+        getContentPane().add(jlFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 410, 80, 20));
+
+        jlHora.setForeground(new java.awt.Color(0, 204, 0));
+        jlHora.setText("HH:MM:SS");
+        getContentPane().add(jlHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 60, 20));
 
         jb_fondo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jb_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/wallpers_1.jpg"))); // NOI18N
         jb_fondo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jb_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 510, 440));
+        getContentPane().add(jb_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 550, 490));
+
+        jlhora_fecha.setText("jLabel7");
+        getContentPane().add(jlhora_fecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 430, 90, 40));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -126,6 +199,20 @@ public class Registro extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_Btn_CerrarActionPerformed
+
+    private void btn_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarActionPerformed
+      
+        Login logg = new Login();
+        logg.setVisible(true); 
+        this.setVisible(false);
+        
+    }//GEN-LAST:event_btn_cancelarActionPerformed
+
+    private void btn_guardarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardarDatosActionPerformed
+        
+        AgregarDatos(); // se manda a llamar el metodo
+     
+    }//GEN-LAST:event_btn_guardarDatosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -166,8 +253,8 @@ public class Registro extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Btn_Cerrar;
     private javax.swing.JButton btn_Cancelar_Registro;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btn_cancelar;
+    private javax.swing.JButton btn_guardarDatos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -177,13 +264,21 @@ public class Registro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     private javax.swing.JLabel jb_fondo;
+    private javax.swing.JLabel jlFecha;
+    private javax.swing.JLabel jlHora;
+    private javax.swing.JLabel jlhora_fecha;
+    private javax.swing.JPasswordField jpPass;
+    private javax.swing.JTextField txt_apellido_mat;
+    private javax.swing.JTextField txt_apellido_pat;
+    private javax.swing.JTextField txt_correo;
+    private javax.swing.JTextField txt_id;
+    private javax.swing.JTextField txt_nombres;
+    private javax.swing.JTextField txt_usuario;
     // End of variables declaration//GEN-END:variables
+ 
+    
+    Conectar cc = new Conectar(); // se manda a llamar la clase conectar
+    Connection cn=cc.conexion();
+
 }

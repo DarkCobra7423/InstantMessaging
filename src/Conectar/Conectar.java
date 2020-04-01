@@ -8,7 +8,8 @@ package Conectar;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import javax.swing.JOptionPane;
-
+import java.sql.*;
+import javax.swing.*;
 /**
  *
  * @author TAMY
@@ -26,7 +27,7 @@ public class Conectar {
             String pass="QWERTY12345c";
             //  jdbc:mysql://85.10.205.173/instantmessaging:3306
             
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             //conect = DriverManager.getConnection("jdbc:mysql://" + "localhost" + "/" + bd, "root", "");
             conect = DriverManager.getConnection("jdbc:mysql://" + url + "/" + bd, usu, pass);
             System.out.println("Connection established!");

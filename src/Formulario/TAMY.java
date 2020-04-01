@@ -37,7 +37,7 @@ public class TAMY extends javax.swing.JFrame {
         jlFecha.setText(fecha());
         ///////////////////
         
-       TAMY();
+
         
     }
     
