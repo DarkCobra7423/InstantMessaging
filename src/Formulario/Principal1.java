@@ -66,7 +66,7 @@ public class Principal1 extends javax.swing.JFrame implements Runnable {
             }
             jmPara.setText(id);
             System.out.println("Este es el metodo");
-            cc.CerrarConexion();
+            //cc.CerrarConexion();
         }catch(Exception ex){
             System.out.println("Error al cargar el historial \n"+ex);
         }

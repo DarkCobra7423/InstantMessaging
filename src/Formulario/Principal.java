@@ -144,7 +144,7 @@ public class Principal extends javax.swing.JFrame {
         //ABRIR LA VENTANA DE HISTORIAL DE CHAT
         //////////////////////////////////////////
         Thread hilo=new Thread(new Principal1());
-        //hilo.start();
+        hilo.stop();
         /////////////////////////////////////////
         Principal1 pc=new Principal1();
         pc.setVisible(true);
@@ -152,7 +152,7 @@ public class Principal extends javax.swing.JFrame {
         Principal1.jlNick.setText(chat);
         pc.CargarMensajes(id, IdEmisor);
         pc.ObtenerNombre();
-        hilo.start();
+        //hilo.start();
         this.setVisible(false);
         //JOptionPane.showMessageDialog(null, "funciona -->"+este+"<--");
     }//GEN-LAST:event_jListMouseClicked
