@@ -270,6 +270,7 @@ public class Principal1 extends javax.swing.JFrame implements Runnable {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        jtHistorial.setText("");
         CargarMensajes(jmPara.getText(), jmUsuario1.getText());
     }//GEN-LAST:event_jButton2ActionPerformed
 
