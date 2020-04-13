@@ -21,9 +21,19 @@ public class ConectarH2 {
             conect=DriverManager.getConnection("jdbc:h2:~/test", "sa","");
             System.out.println("Connection established!");
         }catch(Exception ex){
-        System.out.println("Error en la BD H2\n"+ex);
+        System.out.println("Error de conexion a la Base De Datos H2\n"+ex);
         }
         return conect;
     }
+    
+    public void CerrarConexion() {
+	  	try {
+		   conect.close();
+                   System.out.println("Servicios de la base de datos H2 desconectados");
+		}catch (Exception ex) {
+			//throw new ConnectionException("Ha ocurrido un error al intentar cerrar la conexion con Oracle. Error:" + sqle.getMessage());                                   
+                        System.out.println("Error al desconectar la base de datos H2\n"+ex);
+		}
+	}
     
 }

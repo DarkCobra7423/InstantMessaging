@@ -58,7 +58,7 @@ public class Consola extends javax.swing.JFrame {
         }else if((estado==2) && (Comando.equals("yes"))||(Comando.equals("Yes"))||(Comando.equals("YES"))){
             jtaConsola.append("\nCobraCorporation/Dark_> "+"Starting System\n" + "Wait a Moment...."+"\n");
                 
-            Principal1 pc=new Principal1();
+                Principal pc=new Principal();
                 pc.setVisible(true);
                 pc.pack();
            

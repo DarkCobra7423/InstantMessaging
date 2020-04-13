@@ -7,10 +7,15 @@ package Formulario;
         
 
 import Conectar.Conectar;
-import static Formulario.TAMY.fecha;
+import static Formulario.Principal1.fecha;
 import java.awt.Color;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 
@@ -27,7 +32,8 @@ public class Registro extends javax.swing.JFrame {
          initComponents();
         this.getContentPane().setBackground(Color.BLACK);
         this.setLocationRelativeTo(null);
-      
+        Folio();
+        txt_id.setEditable(false);
         
         ///////////////////
         Reloj rj=new Reloj(jlHora);
@@ -37,20 +43,49 @@ public class Registro extends javax.swing.JFrame {
 
     } // omito el constructor
    
+    void Folio(){
+        int j;
+        int cont=1;
+        String num="";
+        String c="";
+         String SQL="SELECT MAX(idUsuario) FROM usuario";
+       
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs=st.executeQuery(SQL);
+            if(rs.next()){              
+                 c=rs.getString(1);
+            }
+            
+            if(c==null){
+                txt_id.setText("00000001");
+            }
+            else{
+                 j=Integer.parseInt(c);
+                 GenerarNumero gen= new GenerarNumero();
+                 gen.generar(j);
+                 txt_id.setText(gen.serie());
+                
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error en el folio usuario \n"+ex);
+           Logger.getLogger(Registro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
        
     void AgregarDatos(){ // este metodo se utiliza para agregar un nuevo usuario
          
         String pass = String.valueOf(jpPass.getPassword()); //que fue?hay una maña mas facil coppiaiars e ly c odpiegargo de la base de datos por eso lo hago ahi porwue asi no hay muchos errores solo pon los 8 signos
-        String id = "0";
+        //String id = "0";
 // String hora_fecha = String.valueOf(jlhora_fecha.getToolTipText());// este no va porque se obtiene de un label asi que seria mas o menos asi hora_fecha=jlhora.getText()+" "jlfecha.getText();
        String hora_fecha= jlFecha.getText()+ " " + jlHora.getText();
                // que estoy haciendo mal? jlHora es el label donde tienes contenida la hora y me parece que es escrito mal creo qu3 es asi como lo acabo de escribir estas?....  si solo que estoy viendo que está escrito mal ok 
                //
-       String agregarSQL="INSERT INTO Usuario (`idUsuario`, `nombres`, `apellido_materno`, `apellido_paterno`, `correo`, `usuario`, `contrasena`, `hora_fecha`)VALUES(?,?,?,?,?,?,?,?)";
+       String agregarSQL="INSERT INTO usuario (`idUsuario`, `nombres`, `apellido_materno`, `apellido_paterno`, `correo`, `usuario`, `contrasena`, `hora_fecha`)VALUES(?,?,?,?,?,?,?,?)";
        
          try{
            PreparedStatement pst  = cn.prepareStatement(agregarSQL);
-           pst.setString(1, id);
+           pst.setString(1, txt_id.getText());
            pst.setString(2, txt_nombres.getText());
            pst.setString(3, txt_apellido_mat.getText());
            pst.setString(4,txt_apellido_pat.getText());
@@ -63,11 +98,16 @@ public class Registro extends javax.swing.JFrame {
            pst.executeUpdate();
            
            JOptionPane.showMessageDialog(null, "La cuenta se registró correctamente");
+           this.dispose();
+            Login logg = new Login();
+            logg.setVisible(true); 
+            this.setVisible(false);
          }catch(Exception e){
            JOptionPane.showMessageDialog(null, "Error al guardar los datos\n"+e);
         }
          
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -126,18 +166,18 @@ public class Registro extends javax.swing.JFrame {
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Apellido Paterno:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Apellido Materno:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("correo");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 50, -1));
         getContentPane().add(txt_nombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, 190, -1));
-        getContentPane().add(txt_apellido_mat, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 190, -1));
-        getContentPane().add(txt_apellido_pat, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 190, -1));
+        getContentPane().add(txt_apellido_mat, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 190, -1));
+        getContentPane().add(txt_apellido_pat, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 190, -1));
         getContentPane().add(txt_correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 190, -1));
 
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));

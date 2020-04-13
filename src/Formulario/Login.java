@@ -32,7 +32,7 @@ public class Login extends javax.swing.JFrame {
         String usuario=txtUsuario.getText();
         String pass=String.valueOf(txtPass.getPassword());
         
-        String credencial="SELECT * FROM Usuario WHERE usuario='"+usuario+"' AND contrasena= '"+pass+"'";
+        String credencial="SELECT * FROM usuario WHERE usuario='"+usuario+"' AND contrasena= '"+pass+"'";
         
         
         try{
@@ -43,10 +43,7 @@ public class Login extends javax.swing.JFrame {
             if(rs.next()){
                 resultado=1;
                 if(resultado==1){
-                    Principal1 pc=new Principal1();
-                    pc.setVisible(true);
-                    pc.pack();
-                    this.dispose();
+                    this.ObtenerEmisor();//ESTE METODO CREA LA VENTANA Y VALIDA UN IDENTIFICADOR
                 }
             }else{
                 jlError.setText("Usuario O Contraseña Incorrectos");
@@ -54,6 +51,33 @@ public class Login extends javax.swing.JFrame {
             
         }catch(Exception ex){
             System.out.println("Error Clase Login Metodo ValidarCredencial \n"+ex);
+        }
+    }
+    
+    void ObtenerEmisor(){
+        String emisor="";
+        try{
+            Conectar cc=new Conectar();
+            Connection cn=cc.conexion();
+            
+            String emisorSQL="SELECT `idUsuario` FROM usuario WHERE `usuario`='"+txtUsuario.getText()+"'";
+            
+            Statement st=cn.createStatement();
+            ResultSet rs=st.executeQuery(emisorSQL);
+            
+            if(rs.next()){              
+                 emisor=rs.getString(1);
+            }
+            
+            Principal pc=new Principal();
+            pc.setVisible(true);
+            pc.pack();
+            Principal.jmUsuario.setText(emisor);    //envio el emisor a la clase principal
+            this.dispose();
+            
+            cc.CerrarConexion();
+        }catch(Exception ex){
+            System.out.println("Error en el metodo obtener emisor\n"+ex);
         }
     }
 
@@ -87,6 +111,12 @@ public class Login extends javax.swing.JFrame {
 
         jlError.setForeground(new java.awt.Color(204, 204, 204));
         getContentPane().add(jlError, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, 190, 20));
+
+        txtUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUsuarioActionPerformed(evt);
+            }
+        });
         getContentPane().add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 190, -1));
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -153,18 +183,20 @@ public class Login extends javax.swing.JFrame {
 
     private void Btn_CerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_CerrarActionPerformed
         // TODO add your handling code here:
-        this.dispose();
+        //this.dispose();
+        System.exit(0);
     }//GEN-LAST:event_Btn_CerrarActionPerformed
 
     private void btn_IniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_IniciarSesionActionPerformed
-        Principal1 print = new Principal1();
-        print.setVisible(true);
-        this.setVisible(false);
+        //Principal print = new Principal();
+        //print.setVisible(true);
+        //this.setVisible(false);
+        ValidarUsuario();
     }//GEN-LAST:event_btn_IniciarSesionActionPerformed
 
     private void Btn_RegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_RegistrarseActionPerformed
         // TODO add your handling code here:
-       Registro reg = new Registro();
+               Registro reg = new Registro();
                reg.setVisible(true);
                this.setVisible(false);
     }//GEN-LAST:event_Btn_RegistrarseActionPerformed
@@ -187,6 +219,11 @@ public class Login extends javax.swing.JFrame {
         tm.setVisible(true);
         tm.pack();
     }//GEN-LAST:event_btnTamyActionPerformed
+
+    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
+        // TODO add your handling code here:
+        txtUsuario.transferFocus();
+    }//GEN-LAST:event_txtUsuarioActionPerformed
 
     /**
      * @param args the command line arguments

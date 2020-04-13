@@ -6,39 +6,124 @@
 package Formulario;
 
 import Conectar.Conectar;
+import static java.lang.Thread.sleep;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 
 /**
  *
  * @author TAMY-IA
  */
-public class Principal1 extends javax.swing.JFrame {
+public class Principal1 extends javax.swing.JFrame implements Runnable {
 
     /**
      * Creates new form Principal1
      */
     public Principal1() {
         initComponents();
-        
+        this.setLocationRelativeTo(null);
         Reloj hora = new Reloj(jlHora);
         hora.start();
         jlFecha.setText(fecha());
-        
+        jtHistorial.setLineWrap(true);//PARA QUE LAS CADENAS NO SE PASEN DEL CAMPO VISIBLE EN EL JTAXTAREA
+        jtHistorial.setEditable(false);
     }
     
-    void CargarMensajes(){
+    public void run(){
+        int i=0;
+        while(true){
+            try{
+            System.out.println("Funciona el hilo "+i);
+            CargarMensajes(jmPara.getText(), jmUsuario1.getText());
+            i++;
+            sleep(5000);
+        }catch(Exception ex){
+            
+        }
+        }
+    }
+    
+    public void CargarMensajes(String id, String emisor){
+        //                                                   para=id             de=emisor               de=emisor        para=id      leido por ahora sera 0
+        String chat="SELECT * FROM mensaje WHERE (`para`='"+id+"' OR `para`='"+emisor+"') AND (`de`='"+emisor+"' OR `de`='"+id+"') AND `leido`='0'";
+        //SELECT * FROM mensaje WHERE (`para`='00000001' OR `para`='00000002') AND (`de`='00000002' OR `de`='00000001') AND `leido`='1'     CARGA EL HISTORIAL DE DOS PERSONAS
+        System.out.println("SELECT * FROM mensaje WHERE (`para`='"+id+"' OR `para`='"+emisor+"') AND (`de`='"+emisor+"' OR `de`='"+id+"') AND `leido`='0'");
+        String datos="";
         
+        try{
+            Conectar cc=new Conectar();
+            Connection cn=cc.conexion();
+            
+            Statement st=cn.createStatement();
+            ResultSet rs=st.executeQuery(chat);
+            
+            while(rs.next()==true){
+                datos=rs.getString(5)+" - "+rs.getString(6)+": "+rs.getString(7);
+                jtHistorial.append(datos+"\n");
+            }
+            jmPara.setText(id);
+            System.out.println("Este es el metodo");
+            cc.CerrarConexion();
+        }catch(Exception ex){
+            System.out.println("Error al cargar el historial \n"+ex);
+        }
     }
     
     void EnviarMensajes(){
+        Conectar cc=new Conectar();
+        Connection cn=cc.conexion();
         
+        String id="0";
+        String enviarmsj="INSERT INTO mensaje (`idMensaje`, `para`, `de`, `leido`, `hora_fecha`, `enviadopor`, `mensaje`)VALUES(?,?,?,?,?,?,?)";
+        
+        try{
+            PreparedStatement pst  = cn.prepareStatement(enviarmsj);
+            pst.setString(1, id);
+            pst.setString(2, jmPara.getText());
+            pst.setString(3, jmUsuario1.getText());
+            pst.setString(4, id);
+            pst.setString(5, jlFecha.getText()+" "+jlHora.getText());
+            pst.setString(6, jmEnviadopor.getText());
+            pst.setString(7, txtMensaje.getText()); 
+           
+            pst.executeUpdate();
+            jtHistorial.setText("");
+            CargarMensajes(jmPara.getText(), jmUsuario1.getText());
+            txtMensaje.setText("");
+            cc.CerrarConexion();
+        }catch(Exception ex){
+            System.out.println("Error al enviar el msj\n"+ex);
+            jtHistorial.append("Error al enviar el msj:\n"+ex);
+        }
+    }
+    
+    void ObtenerNombre(){
+        Conectar cc=new Conectar();
+        Connection cn=cc.conexion();
+        String sql="SELECT `nombres` FROM usuario WHERE `idUsuario`='"+jmUsuario1.getText()+"'";//CAMBOAR NOMBRES POR USUARIO
+        String nickName="";
+        
+        try{
+            Statement st = cn.createStatement();
+            ResultSet rs=st.executeQuery(sql);
+            if(rs.next()){              
+                 nickName=rs.getString(1);
+            }
+            jmEnviadopor.setText(nickName);
+            this.setTitle(nickName);
+            cc.CerrarConexion();
+        }catch(Exception ex){
+            System.out.println("Error al obtener nombre\n"+ex);
+        }
     }
     
     public static String fecha(){
         java.util.Date fecha = new java.util.Date();
-        SimpleDateFormat formatofecha= new SimpleDateFormat("dd/MM/YYYY");
-        
+        SimpleDateFormat formatofecha= new SimpleDateFormat("yyyy-MM-dd");
+                                                       //   "YYYY/MM/dd"    dd-MM-yyyy
         return formatofecha.format(fecha);
     }
 
@@ -51,29 +136,39 @@ public class Principal1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtHistorial = new javax.swing.JTextArea();
         txtMensaje = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jlActivos = new javax.swing.JList<>();
         btnEnviar = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jlHora = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jlFecha = new javax.swing.JLabel();
+        jlHora = new javax.swing.JLabel();
+        jlNick = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jmUsuario1 = new javax.swing.JMenu();
+        jmPara = new javax.swing.JMenu();
+        jmEnviadopor = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jtHistorial.setColumns(20);
+        jtHistorial.setFont(new java.awt.Font("MV Boli", 0, 13)); // NOI18N
         jtHistorial.setRows(5);
         jScrollPane1.setViewportView(jtHistorial);
 
-        jScrollPane2.setViewportView(jlActivos);
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(302, 70, 440, 400));
+
+        txtMensaje.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMensajeActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 480, 360, 30));
 
         btnEnviar.setText("Enviar");
         btnEnviar.addActionListener(new java.awt.event.ActionListener() {
@@ -81,67 +176,31 @@ public class Principal1 extends javax.swing.JFrame {
                 btnEnviarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 480, 70, 30));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(214, 214, 214)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtMensaje)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEnviar)
-                    .addComponent(txtMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
+        jButton1.setText("Regresar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, -1, -1));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("NickName");
-
-        jlHora.setText("hh:mm:ss");
-
+        jlFecha.setForeground(new java.awt.Color(255, 255, 255));
         jlFecha.setText("dd/mm/aaaa");
+        getContentPane().add(jlFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 20, 65, -1));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(263, 263, 263)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jlHora)
-                    .addComponent(jlFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jlFecha)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlHora))
-        );
+        jlHora.setForeground(new java.awt.Color(255, 255, 255));
+        jlHora.setText("hh:mm:ss");
+        getContentPane().add(jlHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 40, -1, -1));
+
+        jlNick.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jlNick.setForeground(new java.awt.Color(255, 255, 255));
+        jlNick.setText("NickName");
+        getContentPane().add(jlNick, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, -1, -1));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/wallpers_1.jpg"))); // NOI18N
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 760, 540));
 
         jMenu1.setText("File");
 
@@ -158,34 +217,23 @@ public class Principal1 extends javax.swing.JFrame {
         jMenu2.setText("Edit");
         jMenuBar1.add(jMenu2);
 
-        setJMenuBar(jMenuBar1);
+        jmUsuario1.setText("Usuario");
+        jMenuBar1.add(jmUsuario1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jmPara.setText("Para");
+        jMenuBar1.add(jmPara);
+
+        jmEnviadopor.setText("Mi nombre");
+        jMenuBar1.add(jmEnviadopor);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
         // TODO add your handling code here:
+        EnviarMensajes();
         
     }//GEN-LAST:event_btnEnviarActionPerformed
 
@@ -196,6 +244,20 @@ public class Principal1 extends javax.swing.JFrame {
                 lg.pack();
                 this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        Principal pc=new Principal();
+        pc.setVisible(true);
+        Principal.jmUsuario.setText(jmUsuario1.getText());
+        this.setVisible(false);
+       
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMensajeActionPerformed
+        // TODO add your handling code here:
+        EnviarMensajes();
+    }//GEN-LAST:event_txtMensajeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -234,21 +296,20 @@ public class Principal1 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JList<String> jlActivos;
     private javax.swing.JLabel jlFecha;
     private javax.swing.JLabel jlHora;
+    public static javax.swing.JLabel jlNick;
+    private javax.swing.JMenu jmEnviadopor;
+    private javax.swing.JMenu jmPara;
+    public static javax.swing.JMenu jmUsuario1;
     private javax.swing.JTextArea jtHistorial;
     private javax.swing.JTextField txtMensaje;
     // End of variables declaration//GEN-END:variables
-    Conectar cc = new Conectar();
-    Connection cn=cc.conexion();
 }

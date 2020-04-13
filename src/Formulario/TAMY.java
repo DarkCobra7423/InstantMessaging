@@ -26,9 +26,9 @@ public class TAMY extends javax.swing.JFrame {
      */
     public TAMY() {
         initComponents();
-        this.getContentPane().setBackground(Color.BLACK);
+        this.getContentPane().setBackground(Color.BLACK);//PARA CAMBIAR EL COLOR DEL FONDO DEL JTEXTAREA
         this.setLocationRelativeTo(null);
-        jtaTAMY.setLineWrap(true);
+        jtaTAMY.setLineWrap(true);//PARA QUE LAS CADENAS NO SE PASEN DEL CAMPO VISIBLE EN EL JTAXTAREA
         
         ///////////////////
         Reloj rj=new Reloj(jlHora);
