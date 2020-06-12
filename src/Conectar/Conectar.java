@@ -29,7 +29,7 @@ public class Conectar {
             
             Class.forName("com.mysql.cj.jdbc.Driver");
             //conect = DriverManager.getConnection("jdbc:mysql://" + "localhost:" + "/" + bd, "root", "");
-            //conect = DriverManager.getConnection("jdbc:mysql://localhost:3608/instantmessaging", "root", "root");
+            //////conect = DriverManager.getConnection("jdbc:mysql://localhost:3608/instantmessaging", "root", "root");
             //conect = DriverManager.getConnection("jdbc:mysql://" + "192.168.43.130:3306" + "/" + bd, "root", "");
             conect = DriverManager.getConnection("jdbc:mysql://" + url + "/" + bd, usu, pass);
             System.out.println("Connection established!");

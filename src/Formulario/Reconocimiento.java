@@ -6,6 +6,7 @@
 package Formulario;
 
 import Conectar.Conectar;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -21,35 +22,38 @@ public class Reconocimiento extends javax.swing.JFrame {
      */
     public Reconocimiento() {
         initComponents();
-        jtError.setLineWrap(true);//PARA QUE LAS CADENAS NO SE PASEN DEL CAMPO VISIBLE EN EL JTAXTAREA
-        CargarErrores();
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
+        this.setBackground(Color.WHITE);
+        jtaError.setLineWrap(true);//PARA QUE LAS CADENAS NO SE PASEN DEL CAMPO VISIBLE EN EL JTAXTAREA
+        Cargar();
     }
     
-    public void CargarErrores(){
-       
-        String error="SELECT * FROM `reconocimiento`";
-       
+    void Cargar(){
+        
+        String sql="SELECT * FROM reconocimiento";
         String datos="";
+        int i=1;
         
         try{
             Conectar cc=new Conectar();
             Connection cn=cc.conexion();
             
             Statement st=cn.createStatement();
-            ResultSet rs=st.executeQuery(error);
+            ResultSet rs=st.executeQuery(sql);
             
             while(rs.next()==true){
-                datos=rs.getString(1)+"\n"+rs.getString(2)+"\n"+rs.getString(3)+"\n"+rs.getString(4);
-                jtError.append(datos+"\n");
+                datos=i+")  "+rs.getString(2)+" - "+rs.getString(3)+":\n\nFalla:\n"+rs.getString(4)+"\n\n Solucion:\n "+rs.getString(5)+"\n\n";
+                jtaError.append(datos+"\n");
+                i++;
             }
-            //jmPara.setText(id);
-            //System.out.println("Este es el metodo");
+            
             cc.CerrarConexion();
+            
         }catch(Exception ex){
-            System.out.println("Error al cargar el historial de errores \n"+ex);
+            System.out.println("Error al cargar el historial \n"+ex);
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,57 +64,33 @@ public class Reconocimiento extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jtError = new javax.swing.JTextArea();
-        txtValor = new javax.swing.JFormattedTextField();
-        btnValor = new javax.swing.JButton();
+        jtaError = new javax.swing.JTextArea();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Reconocimiento De Errores");
+        setBackground(new java.awt.Color(255, 255, 255));
+        setForeground(java.awt.Color.white);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jtError.setColumns(20);
-        jtError.setRows(5);
-        jScrollPane1.setViewportView(jtError);
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnValor.setText("Enviar");
+        jButton1.setText("Solicitar Ayuda A Soporte Tecnico");
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 440, -1, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnValor)
-                .addGap(0, 12, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtValor, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
-                    .addComponent(btnValor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(6, 6, 6))
-        );
+        jScrollPane1.setBorder(null);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jtaError.setEditable(false);
+        jtaError.setColumns(20);
+        jtaError.setLineWrap(true);
+        jtaError.setRows(5);
+        jScrollPane1.setViewportView(jtaError);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 740, 430));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 760, 480));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -151,10 +131,9 @@ public class Reconocimiento extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnValor;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jtError;
-    private javax.swing.JFormattedTextField txtValor;
+    private javax.swing.JTextArea jtaError;
     // End of variables declaration//GEN-END:variables
 }

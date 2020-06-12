@@ -38,7 +38,9 @@ public class Consola extends javax.swing.JFrame {
         jtaConsola.setText("        Welcome MR. Dark Cobra\n"+"        Welcome Miss. DH Sawyers\n"+"        Welcome Miss. Solitario\n"+"        Welcome MR. Aguilar\n\nroot_>\n");
         
     }
+    
     public int estado=0;
+    
     void Ejecutar(){
         
         String Comando=txtComando.getText();
